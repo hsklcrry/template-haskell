@@ -42,23 +42,17 @@ joinAll [] = []
 joinAll x = undefined
 
 ------------------------------------------------------------
-ww :: [[a]] -> ([a], [[a]])
-ww [] = ([], [])
-ww (l:ls) = ( listMtoList [headM l], tail l : ls )
-
-ww (l:ls) = ( listMtoList [headM l], tail l : ls )
-
---onestep
--- даётся диагональ и таблица над ней, вернуть следующую диагональ и остаток таблицы
 
 tail' :: [a] -> [a]
 tail' [] = []
 tail' (_:as) = as
 
+--onestep
+-- даётся диагональ и таблица над ней, вернуть следующую диагональ и остаток таблицы
 nextDiag :: [a] -> [[a]] -> ([a], [[a]])
 nextDiag _ [] = ([],[])
-nextDiag [] (l:ls) = ( listMtoList [headM l], tail' l : ls )
 nextDiag as ([]:ls) = nextDiag as ls
+nextDiag [] (l:ls) = ( listMtoList [headM l], tail l : ls )
 nextDiag (_:as) (l:ls) = (lhead ++ diag, tail l : table)
     where
         lhead = listMtoList [headM l]
