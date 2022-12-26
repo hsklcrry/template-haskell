@@ -1,8 +1,8 @@
-module MyLib (takeHeads, nextDiag, diagonals, someFunc) where
+module MyLib (diagonals, someFunc) where
 
 import Data.List ()
 import Data.Maybe (maybeToList)
-import GHC.Stack (whoCreated)
+
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
@@ -23,6 +23,7 @@ listMtoList [] = []
 listMtoList (Nothing : ls) = listMtoList ls 
 listMtoList (Just x : ls) = x : listMtoList ls 
 
+{--
 takeHeadsM :: Integer -> [[a]] -> [Maybe a]
 takeHeadsM 0 lst = []
 takeHeadsM _ [] = []
@@ -30,17 +31,7 @@ takeHeadsM n (l:lst) = headM l : takeHeadsM (n - 1) lst
 
 takeHeads :: Integer -> [[a]] -> [a]
 takeHeads n ls = joinAll $ map maybeToList $ takeHeadsM n ls
-
-diagonals2 :: [[a]] -> [[a]]
-diagonals2 [] = []
-diagonals2 lst = nextDiag' 1 lst
-    where 
-        nextDiag' n (l:ls) = takeHeads n (l:ls) : nextDiag' (n + 1) (l:ls)
-
-joinAll :: [[a]] -> [a]
-joinAll [] = []
-joinAll x = undefined
-
+--}
 ------------------------------------------------------------
 
 tail' :: [a] -> [a]
@@ -59,13 +50,15 @@ nextDiag (_:as) (l:ls) = (lhead ++ diag, tail l : table)
         (diag, table) = nextDiag as ls
 
 
-
 diagonals :: [[a]] -> [[a]]
 diagonals [] = []
 diagonals (t:ts) = diagonals' [] (t:ts) []
     where
         diagonals' _ [] acc = reverse acc
-        diagonals' ds t acc = diagonals' d' t' (d' : acc)
+        diagonals' ds t acc = case d' of 
+            [] -> diagonals' d' t' acc 
+            otherwise -> diagonals' d' t' (d' : acc)
             where 
                 (d', t') = nextDiag ds t
+----------------------------------------------------------------------------------------------
 
